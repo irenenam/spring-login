@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.interview.users">
+    <select id="getUser" resultType="com.interview.users.domain.User" parameterType="hashmap">
+        SELECT idx, userId, name, email, password 
+        FROM users
+        <choose>
+	        <when test="idx != null">
+	        	WHERE idx = #{idx}
+	        </when>
+	        <when test="userId != null">
+	        	WHERE userId = #{userId} 
+	        	<if test="password != null">
+	        		and password = #{password}
+	        	</if>
+	        </when>
+	        <when test="idx != null">
+	        	WHERE idx = #{idx}
+	        </when>
+		</choose>
+    </select>
+    
+    <update id="updateUser" parameterType="com.interview.users.domain.User">
+        UPDATE users  
+        SET name  = '${name}',
+        	email = '${email}', password = '${password}'
+        WHERE idx = '${idx}';
+    </update>
+    
+    <delete id="deleteUser" parameterType="com.interview.users.domain.User">
+        DELETE FROM users  
+        WHERE idx = ${idx}
+    </delete>
+    
+    <insert id="insertUser" parameterType="com.interview.users.domain.User">
+        INSERT INTO users (userId, password, name, email)
+        VALUES ('${userId}', '${password}', '${name}', '${email}')
+    </insert>
+</mapper>
+
